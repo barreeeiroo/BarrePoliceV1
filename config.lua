@@ -70,6 +70,7 @@ return {
 		'cats',
 		'ping',
 		'talk',
+		'yoda',
 		-- END
 
 		'extra', --must be the last plugin in the list.
