@@ -38,6 +38,7 @@ You can easily install Group Butler by running the following commands:
 
 $ wget https://raw.githubusercontent.com/RememberTheAir/GroupButler/master/install.sh
 $ bash install.sh
+$ sudo chmod +x launch.sh
 ```
 
 or
@@ -70,6 +71,7 @@ $ cd ..
 $ git clone https://github.com/RememberTheAir/GroupButler.git
 $ cd GroupButler
 $ sudo chmod 777 launch.sh
+$ sudo chmod +x launch.sh
 ```
 
 Other things to check before running the bot:
