@@ -41,8 +41,6 @@ end
 
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] == 'yoda' then
-    local base_url = "http://scripts.thunkable.ga/BarrePolice/yoda/"
-
     if not blocks[2] then
       api.sendReply(msg, request("You have to say something to me"), true, reply_markup)
     else
