@@ -2,8 +2,9 @@ return {
 	bot_api_key = "", --Please add your bot api key here!
 
 	-- CUSTOM APIs
-	 cleverbot_api_key = "", -- Your CleverBot API Key
-	 apod_api_key = "", -- Your NASA APOD API Key
+	apod_api_key = "", -- Your NASA APOD API Key
+	cleverbot_api_key = "", -- Your CleverBot API Key
+	mashape_api_key = "", -- Your Mashape API Key
 	-- END of CUSTOM APIs
 
 	cmd = '^[/!#]',
