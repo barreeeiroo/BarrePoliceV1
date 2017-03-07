@@ -41,7 +41,7 @@ end
 
 local function parseData(data)
    local obj, pos, err = JSON.decode(data, 1, nil)
-   local text = "*Skin Colors Level:* `" .. obj."Skin Colors" .. "`\n*Contains Bad Words:* `" .. obj."Is Contain Bad Words" .. "\n\n*Is Porn:* " .. obj."Is Porn" .. "\n*Reason:* _" .. obj."Reason" .. "_"
+   local text = "*Skin Colors Level:* `" .. obj.SkinColors .. "`\n*Contains Bad Words:* `" .. obj.IsContainBadWords .. "\n\n*Is Porn:* " .. obj.IsPorn .. "\n*Reason:* _" .. obj.Reason .. "_"
 
    return text
 end
