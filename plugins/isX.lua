@@ -45,7 +45,7 @@ local function parseData(data)
    local JsonBadWords = JSON.decode(data, 3, nil)
    local JsonReason = JSON.decode(data, 4, nil)
 
-   local join = "*Skin Colors Level:* `" .. JsonSkinColors .. "`\n*Contains Bad Words:* `" .. JsonBadWords .. "\n\n*Is Porn:* " .. JsonIsPorn .. "\n*Reason:* _" .. JsonReason
+   local join = "*Skin Colors Level:* `" .. JsonSkinColors .. "`\n*Contains Bad Words:* `" .. JsonBadWords .. "\n\n*Is Porn:* " .. JsonIsPorn .. "\n*Reason:* _" .. "_"
 
    return join
 end
