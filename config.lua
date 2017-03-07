@@ -69,6 +69,7 @@ return {
 		-- MY CUSTOM PLUGINS
 		'apod',
 		'cats',
+		'isX',
 		'ping',
 		'talk',
 		'yoda',
