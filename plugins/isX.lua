@@ -5,6 +5,7 @@ local ltn12 = require "ltn12"
 local https = require "ssl.https"
 local HTTP = require('socket.http')
 local URL = require('socket.url')
+local JSON = require 'dkjson'
 
 local plugin = {}
 
@@ -38,12 +39,28 @@ local function request(imageUrl)
    return body, code
 end
 
+local function parseData(data)
+   local jsonBody = JSON:decode(data)
+   local response = ""
+   if jsonBody["Error Occured"] ~= nil then
+      response = response .. jsonBody["Error Occured"]
+   elseif jsonBody["Is Porn"] == nil or jsonBody["Reason"] == nil then
+      response = response .. "I don't know if that has adult content or not."
+   else
+      if jsonBody["Is Porn"] == "True" then
+         response = response .. "Beware!\n"
+      end
+      response = response .. jsonBody["Reason"]
+   end
+   return jsonBody["Is Porn"], response
+end
+
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] == 'isX' or blocks[1] == 'isx' then
     if not blocks[2] then
       api.sendReply(msg, "You have to _send me_ an *Image URL after the command*", true, reply_markup)
     else
-      api.sendReply(msg, request(blocks[2]), true, reply_markup)
+      api.sendReply(msg, parseData(request(blocks[2])), true, reply_markup)
     end
   end
 end
