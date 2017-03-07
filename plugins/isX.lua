@@ -40,10 +40,11 @@ local function request(imageUrl)
 end
 
 local function parseData(data)
-   local JsonSkinColors = JSON.decode(data, 1, nil)
-   local JsonIsPorn = JSON.decode(data, 2, nil)
-   local JsonBadWords = JSON.decode(data, 3, nil)
-   local JsonReason = JSON.decode(data, 4, nil)
+   print(data)
+   print(JSON.decode(data, 1, nil))
+   print(JSON.decode(data, 2, nil))
+   print(JSON.decode(data, 3, nil))
+   print(JSON.decode(data, 4, nil))
 
    local join = "*Skin Colors Level:* `" .. JsonSkinColors .. "`\n*Contains Bad Words:* `" .. JsonBadWords .. "\n\n*Is Porn:* " .. JsonIsPorn .. "\n*Reason:* _" .. "_"
 
