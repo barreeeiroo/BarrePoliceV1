@@ -40,8 +40,11 @@ local function request(imageUrl)
 end
 
 local function parseData(data)
-   print(data)
-   print(JSON.decode(data, 1, nil))
+   local obj, pos, err = json.decode(data, 1, nil)
+   print ("Reason", obj.Reason)
+   for i = 1, #obj.numbers do
+		   print(i, obj.numbers[i])
+	 end
    print(JSON.decode(data, 2, nil))
    print(JSON.decode(data, 3, nil))
    print(JSON.decode(data, 4, nil))
