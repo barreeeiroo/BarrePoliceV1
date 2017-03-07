@@ -40,18 +40,10 @@ local function request(imageUrl)
 end
 
 local function parseData(data)
-   local obj, pos, err = json.decode(data, 1, nil)
-   print ("Reason", obj.Reason)
-   for i = 1, #obj.numbers do
-		   print(i, obj.numbers[i])
-	 end
-   print(JSON.decode(data, 2, nil))
-   print(JSON.decode(data, 3, nil))
-   print(JSON.decode(data, 4, nil))
+   local obj, pos, err = JSON.decode(data, 1, nil)
+   local text = "*Skin Colors Level:* `" .. obj."Skin Colors" .. "`\n*Contains Bad Words:* `" .. obj."Is Contain Bad Words" .. "\n\n*Is Porn:* " .. obj."Is Porn" .. "\n*Reason:* _" .. obj."Reason" .. "_"
 
-   local join = "*Skin Colors Level:* `" .. JsonSkinColors .. "`\n*Contains Bad Words:* `" .. JsonBadWords .. "\n\n*Is Porn:* " .. JsonIsPorn .. "\n*Reason:* _" .. "_"
-
-   return join
+   return text
 end
 
 function plugin.onTextMessage(msg, blocks)
