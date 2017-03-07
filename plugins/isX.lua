@@ -38,7 +38,7 @@ local function request(imageUrl)
 end
 
 function plugin.onTextMessage(msg, blocks)
-	if blocks[1] == 'yoda' then
+	if blocks[1] == 'isX' or blocks[1] == 'isx' then
     if not blocks[2] then
       api.sendReply(msg, "You have to _send me_ an *Image URL after the command*", true, reply_markup)
     else
@@ -49,8 +49,8 @@ end
 
 plugin.triggers = {
 	onTextMessage = {
-		config.cmd..'(isX) (.*)$',
-    config.cmd..'(isX)$'
+		config.cmd..'(is[x|X]) (.*)$',
+    config.cmd..'(is[x|X])$'
 	}
 }
 
