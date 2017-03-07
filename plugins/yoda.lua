@@ -3,6 +3,8 @@ local u = require 'utilities'
 local api = require 'methods'
 local ltn12 = require "ltn12"
 local https = require "ssl.https"
+local HTTP = require('socket.http')
+local URL = require('socket.url')
 
 local plugin = {}
 

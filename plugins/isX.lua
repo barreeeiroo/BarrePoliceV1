@@ -3,6 +3,8 @@ local u = require 'utilities'
 local api = require 'methods'
 local ltn12 = require "ltn12"
 local https = require "ssl.https"
+local HTTP = require('socket.http')
+local URL = require('socket.url')
 
 local plugin = {}
 
@@ -16,15 +18,14 @@ local function request(imageUrl)
       return nil, 'Configure your Mashape API Key'
    end
 
-   local api = "https://sphirelabs-advanced-porn-nudity-and-adult-content-detection.p.mashape.com/v1/get/index.php?"
-   local parameters = "&url="..(URL.escape(imageUrl) or "")
+   local api = "https://sphirelabs-advanced-porn-nudity-and-adult-content-detection.p.mashape.com/v1/get/index.php"
+   local parameters = "?url="..(URL.escape(imageUrl) or "")
    local url = api..parameters
    local respbody = {}
    local headers = {
       ["X-Mashape-Key"] = api_key,
       ["Accept"] = "Accept: application/json"
    }
-   print(url)
    local body, code, headers, status = https.request{
       url = url,
       method = "GET",
