@@ -1,20 +1,16 @@
-# Group Butler
+# BarrePolice
 
 ## Short introduction
 
 This bot has been created to help people administrate their groups, and includes many useful tools.
 
-Group Butler was born as an [otouto](https://otou.to) [v3.1](https://github.com/topkecleon/otouto/tree/26c1299374af130bbf8457af904cb4ea450caa51) ([`@mokubot`](https://telegram.me/mokubot)), but it has been turned into an administration bot.
+Barre Police was born as an **GroupButler** [v3.1](https://github.com/topkecleon/otouto/tree/26c1299374af130bbf8457af904cb4ea450caa51) ([`@mokubot`](https://telegram.me/mokubot)), but it has been turned into an administration bot.
 
-#### Group Butler on Telegram:
+#### Barre Police on Telegram:
 
-- [`@GroupButler_bot`](https://telegram.me/GroupButler_Bot)
+- [`@BarrePolice_Bot`](https://telegram.me/BarrePolice_Bot)
     - **_branch_**: `master`
-    - **_channel_**: [`@GroupButler_ch`](https://telegram.me/groupbutler_ch).
-
-- [`@GBReborn_bot`](https://telegram.me/GBReborn_bot)
-    - **_branch_**: `beta`
-    - **_channel_**: [`@GroupButler_beta`](https://telegram.me/GroupButler_beta).
+    - **_channel_**: [`@Barreeeiroo_Ch`](https://telegram.me/Barreeeiroo_Ch)
 
 * * *
 
@@ -153,13 +149,13 @@ After add your new locale in the file `config.lua`.
 
 ## Pull requests
 
-If you are going to open a pull request, please use the [`beta` branch](https://github.com/RememberTheAir/GroupButler/tree/beta) as destination branch.
-
-Pull requests in the `master` branch won't be considered, unless they are intended to solve a critical problem.
+We are still launching the bot for public use. Please, _be patient_
 
 * * *
 
 ## Credits
+
+[RememberTheAir](https://github.com/RememberTheAir), for the original [GroupButler](https://github.com/RememberTheAir/GroupButler)
 
 [Topkecleon](https://github.com/topkecleon), for the original [otouto](https://github.com/topkecleon/otouto)
 
