@@ -72,6 +72,7 @@ return {
 		'isX',
 		'ping',
 		'porn',
+		'shout',
 		'talk',
 		'yoda',
 		-- END
