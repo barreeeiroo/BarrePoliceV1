@@ -7,6 +7,9 @@ local HTTPS = require 'ssl.https'
 -- Import JSON manager
 json = (loadfile "./libs/JSON.lua")()
 
+-- Import UTF-8
+local utf8 = utf8 or require('lua-utf8')
+
 -- utilities.lua
 -- Functions shared among plugins.
 
@@ -90,6 +93,17 @@ function utilities.is_superadmin(user_id)
 	end
 	return false
 end
+
+utilities.char = {
+    zwnj = utf8.char(0x200c),
+    arabic = '[\216-\219][\128-\191]',
+    rtl_override = utf8.char(0x202e),
+    rtl_mark = utf8.char(0x200f),
+    em_dash = '—',
+    utf_8 = '[%z\1-\127\194-\244][\128-\191]',
+    braille_space = utf8.char(0x2800),
+    invisible_separator = utf8.char(0x2063)
+}
 
 function utilities.bot_is_admin(chat_id)
 	local status = api.getChatMember(chat_id, bot.id).result.status
