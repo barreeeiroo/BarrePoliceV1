@@ -71,6 +71,7 @@ return {
 		'cats',
 		'isX',
 		'ping',
+		'porn',
 		'talk',
 		'yoda',
 		-- END
