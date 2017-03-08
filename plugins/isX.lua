@@ -5,7 +5,6 @@ local ltn12 = require "ltn12"
 local https = require "ssl.https"
 local HTTP = require('socket.http')
 local URL = require('socket.url')
-local JSON = require 'dkjson'
 
 local plugin = {}
 
@@ -40,10 +39,16 @@ local function request(imageUrl)
 end
 
 local function parseData(data)
-   local obj, pos, err = JSON.decode(data, 1, nil)
-   local text = "*Skin Colors Level:* `" .. obj.Skin%s+Colors .. "`\n*Contains Bad Words:* `" .. obj.Is%s+Contain%s+Bad%s+Words .. "\n\n*Is Porn:* " .. obj.Is%s+Porn .. "\n*Reason:* _" .. obj.Reason .. "_"
-
-   return text
+   local jsonBody = json:decode(data)
+   local response = ""
+   if jsonBody["Error Occured"] ~= nil then
+      response = jsonBody["Error Occured"]
+   elseif jsonBody["Is Porn"] == nil or jsonBody["Reason"] == nil then
+      response = "I don't know if that has adult content or not."
+   else
+      local response = "Skin Colors Level: `" .. jsonBody["Skin Colors"] .. "`\nContains Bad Words: `" .. jsonBody["Is Contain Bad Words"] .. "`\n\n*Is Porn:* " .. jsonBody["Is Porn"] .. "\n*Reason:* _" .. jsonBody["Reason"] .. "_"
+   end
+   return response
 end
 
 function plugin.onTextMessage(msg, blocks)
@@ -51,7 +56,9 @@ function plugin.onTextMessage(msg, blocks)
     if not blocks[2] then
       api.sendReply(msg, "You have to _send me_ an *Image URL after the command*", true, reply_markup)
     else
-      api.sendReply(msg, parseData(request(blocks[2])), true, nil, true)
+      local request_data = request(blocks[2])
+      local parse_data = parseData(request_data)
+      api.sendReply(msg, parse_data, true, reply_markup)
     end
   end
 end
