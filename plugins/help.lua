@@ -343,6 +343,13 @@ This plugin is not for under 18. It sends a porn image of butts or boobs
 The avaliable commands are:
 - /porn `boobs`/`butts` - _Sends an image of your selection_]])
 
+	elseif key == 'shout' then
+		return _([[*Shout Plugin*
+
+Let's shout words! With this plugin, the bot will simulate that you are shouting
+The avaliable commands are:
+- /shout `something` - _Shout the _`something`]])
+
 	elseif key == 'talk' then
 		return _([[*Talk Plugin*
 
@@ -418,11 +425,11 @@ local function dk_others()
 	  },
 		{
 			[_("Porn 🔞")] = 'porn',
-	    [_("Talk")] = 'talk'
+			[_("Shout")] = 'shout'
 	  },
 		{
-			[_("Yoda")] = 'yoda',
-	    [_("None")] = 'none'
+			[_("Talk")] = 'talk',
+			[_("Yoda")] = 'yoda'
 	  },
 
   }
