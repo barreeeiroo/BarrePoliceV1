@@ -13,16 +13,15 @@ local function isempty(s)
 end
 
 local function request(text)
-   local api = "https://yoda.p.mashape.com/yoda?"
-   text = string.gsub(text, " ", "+")
-   local parameters = "sentence="..(text or "")
-   local url = api..parameters
-
    local api_key = config.mashape_api_key
    if isempty(api_key) then
       return 'Configure your Mashape API Key'
    end
 
+   local api = "https://yoda.p.mashape.com/yoda?"
+   text = string.gsub(text, " ", "+")
+   local parameters = "sentence="..(text or "")
+   local url = api..parameters
    local headers = {
       ["X-Mashape-Key"] = api_key,
       ["Accept"] = "text/plain"
