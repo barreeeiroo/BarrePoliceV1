@@ -313,12 +313,36 @@ The avaliable commands are:
 - /apod `image` - _Sends the NASA Image of the day_
 - /apod `hd` - _Sends the NASA Image of the day in HD quality_
 - /apod `data` - _Sends the data of the NASA Image of the day_]])
+
+	elseif key == 'cats' then
+		return _([[*Cats Plugin*
+
+I love cats, so why not send a picture of a cat?
+The avaliable commands are:
+- /cat - _Sends a cat_]])
+
+	elseif key == 'isX' then
+		return _([[*Porn Detector*
+
+Don't you like porn images? Do you want to detect them without seen it? Here's the solution:
+This plugin will allow you to detect if an image contains explicit content.
+The avaliable commands are:
+- /isX `Image_URL` - _Detects if it has porn_]])
+
 	elseif key == 'ping' then
 		return _([[*Ping Plugin*
 
 This plugins cannot be more simple. It's function is just to know if I'm running or not.
 The avaliable commands are:
 - /ping - _Receive an answer to see if I'm alive_]])
+
+	elseif key == 'porn' then
+		return _([[*Porn Plugin 🔞*
+
+This plugin is not for under 18. It sends a porn image of butts or boobs
+The avaliable commands are:
+- /porn `boobs`/`butts` - _Sends an image of your selection_]])
+
 	elseif key == 'talk' then
 		return _([[*Talk Plugin*
 
@@ -326,12 +350,19 @@ My creator has worked so much in this plugin, and it allows you to talk with me 
 It uses CleverBot API for receiving the answers, but don't abuse, because I can only receive 5000 petitions per month
 The avaliable commands are:
 - /talk `something` - _I will reply to your _`something`_ with a clever (or not) answer_]])
-	elseif key == 'cats' then
-		return _([[*Cats Plugin*
 
-I love cats, so why not send a picture of a cat?
+	elseif key == 'yoda' then
+		return _([[*Yoda Plugin*
+
+Do you like Star Wars? So you must know who is Yoda. If you have ever wondered to speak like him, here is the answer!
+This plugin will transform everything you say into Yoda Words. Test it!
 The avaliable commands are:
-- /cat - _Sends a cat_]])
+- /yoda `something` - _Transform your _`something`_ into a Yoda's words_]])
+
+	elseif key == 'none' then
+		return _([[`None`]])
+
+
 	end
 end
 
@@ -378,12 +409,20 @@ local function dk_others()
 	keyboard.inline_keyboard = {}
 	local list = {
 		{
-			[_("Cats")] = 'cats',
-	    [_("NASA Apod")] = 'apod'
+			[_("NASA Apod")] = 'apod',
+	    [_("Cats")] = 'cats'
 	  },
 		{
-			[_("Ping")] = 'ping',
+			[_("Porn Detector")] = 'isX',
+	    [_("Ping")] = 'ping'
+	  },
+		{
+			[_("Porn 🔞")] = 'porn',
 	    [_("Talk")] = 'talk'
+	  },
+		{
+			[_("Yoda")] = 'yoda',
+	    [_("None")] = 'none'
 	  },
 
   }
