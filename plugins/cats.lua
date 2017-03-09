@@ -13,8 +13,7 @@ function plugin.onTextMessage(msg, blocks)
 		if not output or res ~= 200 or output:len() == 0 then
 		      output, res = HTTP.request(url)
 		end
-		local message = "[Cat's are our Gods!]("..output..")"
-		api.sendReply(msg, message, true, nil, true)
+		api.sendMediaId(msg.chat.id, output, "photo", true, "Cat's are our Gods!")
   end
 end
 

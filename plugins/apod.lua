@@ -20,32 +20,23 @@ function plugin.onTextMessage(msg, blocks)
 		    if not output or res ~= 200 or output:len() == 0 then
 		        output, res = HTTP.request(url)
 		    end
-				local message = "[Today's NASA Image]("..output..")"
-				api.sendReply(msg, message, true, nil, true)
-
+				api.sendMediaId(msg.chat.id, output, "photo", true, "Today's NASA Image")
 
 			elseif blocks[2] == 'hd' then
-
-
 				local url = base_url .. "&hd"
 				local output, res = HTTP.request(url)
 		    if not output or res ~= 200 or output:len() == 0 then
 		        output, res = HTTP.request(url)
 		    end
-				local message = "[Today's NASA Image in High-Definition]("..output..")"
-				api.sendReply(msg, message, true, nil, true)
-
+				api.sendMediaId(msg.chat.id, output, "photo", true, "Today's NASA Image")
 
 			elseif blocks[2] == 'data' then
-
-
 				local url = base_url .. "&data"
 				local output, res = HTTP.request(url)
 		    if not output or res ~= 200 or output:len() == 0 then
 		        output, res = HTTP.request(url)
 		    end
 				api.sendReply(msg, output, true, reply_markup)
-
 
 			else
 				local message = "Unknown request"

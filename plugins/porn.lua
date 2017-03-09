@@ -48,12 +48,10 @@ function plugin.onTextMessage(msg, blocks)
     else
       if blocks[2] == 'boob' or blocks[2] == 'boobs' then
         local getPorn = getRandomBoobs()
-        local message = "[Here are your boobs:]("..getPorn..")"
-				api.sendReply(msg, message, true, nil, true)
+        api.sendMediaId(msg.chat.id, getPorn, "photo", true, "Here are your boobs:")
       elseif blocks[2] == 'butt' or blocks[2] == 'butts' then
         local getPorn = getRandomButts()
-        local message = "[Here are your butts:]("..getPorn..")"
-				api.sendReply(msg, message, true, nil, true)
+        api.sendMediaId(msg.chat.id, getPorn, "photo", true, "Here are your butts:")
       else
         local message = "*Avaliable Commands:*\n\n- /porn `boobs` - _Sends random boobs_\n- /porn `butts` - _sends random butts_"
         api.sendReply(msg, message, true, nil, true)
