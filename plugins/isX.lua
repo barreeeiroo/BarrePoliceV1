@@ -39,6 +39,7 @@ local function request(imageUrl)
 end
 
 local function parseData(data)
+   print(data)
    local jsonBody = json:decode(data)
    local response = ""
    if jsonBody["Error Occured"] ~= nil then
@@ -60,7 +61,6 @@ function plugin.onTextMessage(msg, blocks)
       local request_data = request(blocks[2])
       print(request_data)
       local parse_data = parseData(request_data)
-      print(parse_data)
       --api.sendMessage(msg.chat.id, parse_data)
     end
   end
