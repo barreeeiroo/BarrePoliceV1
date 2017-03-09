@@ -35,8 +35,6 @@ local function request(imageUrl)
    }
    if code ~= 200 then return "", code end
    local body = table.concat(respbody)
-   print(body)
-   print(code)
    return body, code
 end
 
@@ -60,7 +58,9 @@ function plugin.onTextMessage(msg, blocks)
     else
       api.sendChatAction(msg.chat.id, "typing")
       local request_data = request(blocks[2])
+      print(request_data)
       local parse_data = parseData(request_data)
+      print(parse_data)
       --api.sendMessage(msg.chat.id, parse_data)
     end
   end
