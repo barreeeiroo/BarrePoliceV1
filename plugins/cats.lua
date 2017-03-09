@@ -8,7 +8,7 @@ local plugin = {}
 
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] == 'cat' or blocks[1] == 'cats' then
-		api.sendChatAction(chat_id, "upload_photo")
+		api.sendChatAction(msg.chat.id, "upload_photo")
 		local url = "http://barreeeiroo.ga/BarrePolice/cats/"
 		local output, res = HTTP.request(url)
 		if not output or res ~= 200 or output:len() == 0 then
