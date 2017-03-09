@@ -20,7 +20,7 @@ function plugin.onTextMessage(msg, blocks)
 		    if not output or res ~= 200 or output:len() == 0 then
 		        output, res = HTTP.request(url)
 		    end
-				api.sendMediaId(msg.chat.id, output, "photo", msg, "Today's NASA Image")
+				api.sendMediaId(msg.chat.id, output, "photo", msg.message_id, "Today's NASA Image")
 
 			elseif blocks[2] == 'hd' then
 				api.sendChatAction(chat_id, "upload_photo")
@@ -29,7 +29,7 @@ function plugin.onTextMessage(msg, blocks)
 		    if not output or res ~= 200 or output:len() == 0 then
 		        output, res = HTTP.request(url)
 		    end
-				api.sendMediaId(msg.chat.id, output, "photo", msg, "Today's NASA Image")
+				api.sendMediaId(msg.chat.id, output, "photo", msg.message_id, "Today's NASA Image")
 
 			elseif blocks[2] == 'data' then
 				api.sendChatAction(chat_id, "typing")
