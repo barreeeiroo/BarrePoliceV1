@@ -1,8 +1,8 @@
 local config = require 'config'
 local u = require 'utilities'
 local api = require 'methods'
-local HTTP = require('socket.http')
-local URL = require('socket.url')
+local http = require('socket.http')
+local url = require('socket.url')
 
 local plugin = {}
 
@@ -10,7 +10,6 @@ local images_enabled = true;
 
 local function get_sprite(path)
   local url = "http://pokeapi.co/"..path
-  print(url)
   local b,c = http.request(url)
   local data = json:decode(b)
   local image = data.image
@@ -21,13 +20,13 @@ local function callback(extra)
   --send_msg(extra.receiver, extra.text, ok_cb, false)
 end
 
-local function send_pokemon(query)
+local function send_pokemon(query, msg, chat_id)
   local url = "http://pokeapi.co/api/v1/pokemon/" .. query .. "/"
   local b,c = http.request(url)
   local pokemon = json:decode(b)
 
   if pokemon == nil then
-    return 'No pokémon found.'
+    return api.sendReply(msg, "No pokemon found", true, nil, true)
   end
 
   -- api returns height and weight x10
@@ -53,9 +52,10 @@ local function send_pokemon(query)
       receiver = receiver,
       text = text
     }
-    api.sendMediaId(msg, image, image, true, false)
+    api.sendMediaId(chat_id, image, "photo", false, false)
+    api.sendMessage(chat_id, text, true, nil, false, false)
   else
-    return text
+    api.sendReply(msg, text, true, nil, true)
   end
 end
 
@@ -64,8 +64,8 @@ function plugin.onTextMessage(msg, blocks)
     if not blocks[2] then
 
     else
-      local query = matches[2]
-      api.sendReply(msg, send_pokemon(query), true, nil, true)
+      local query = blocks[2]
+      return send_pokemon(query, msg, msg.chat.id)
     end
   end
 end
