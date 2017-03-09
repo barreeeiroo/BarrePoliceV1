@@ -71,6 +71,7 @@ return {
 		'cats',
 		'isX',
 		'ping',
+		'pokedex',
 		'porn',
 		'shout',
 		'talk',
