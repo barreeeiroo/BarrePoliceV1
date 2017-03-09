@@ -39,7 +39,6 @@ local function request(imageUrl)
 end
 
 local function parseData(data)
-   print(data)
    local jsonBody = json:decode(data)
    local response = ""
    if jsonBody["Error Occured"] ~= nil then
@@ -47,7 +46,7 @@ local function parseData(data)
    elseif jsonBody["Is Porn"] == nil or jsonBody["Reason"] == nil then
       response = "I don't know if that has adult content or not."
    else
-      local response = "Skin Colors Level: `" .. jsonBody["Skin Colors"] .. "`\nContains Bad Words: `" .. jsonBody["Is Contain Bad Words"] .. "`\n\n*Is Porn:* " .. jsonBody["Is Porn"] .. "\n*Reason:* _" .. jsonBody["Reason"] .. "_"
+      response = "Skin Colors Level: `" .. jsonBody["Skin Colors"] .. "`\nContains Bad Words: `" .. jsonBody["Is Contain Bad Words"] .. "`\n\n*Is Porn:* " .. jsonBody["Is Porn"] .. "\n*Reason:* _" .. jsonBody["Reason"] .. "_"
    end
    return response
 end
@@ -59,9 +58,8 @@ function plugin.onTextMessage(msg, blocks)
     else
       api.sendChatAction(msg.chat.id, "typing")
       local request_data = request(blocks[2])
-      print(request_data)
       local parse_data = parseData(request_data)
-      --api.sendMessage(msg.chat.id, parse_data)
+      api.sendReply(msg, parse_data, true, nil, true)
     end
   end
 end
