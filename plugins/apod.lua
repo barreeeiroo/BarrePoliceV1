@@ -14,23 +14,25 @@ function plugin.onTextMessage(msg, blocks)
 			api.sendReply(msg, message, true, nil, true)
 		else
 			if blocks[2] == 'image' then
-
+				api.sendChatAction(chat_id, "upload_photo")
 				local url = base_url .. "&image"
 				local output, res = HTTP.request(url)
 		    if not output or res ~= 200 or output:len() == 0 then
 		        output, res = HTTP.request(url)
 		    end
-				api.sendMediaId(msg.chat.id, output, "photo", true, "Today's NASA Image")
+				api.sendMediaId(msg.chat.id, output, "photo", msg, "Today's NASA Image")
 
 			elseif blocks[2] == 'hd' then
+				api.sendChatAction(chat_id, "upload_photo")
 				local url = base_url .. "&hd"
 				local output, res = HTTP.request(url)
 		    if not output or res ~= 200 or output:len() == 0 then
 		        output, res = HTTP.request(url)
 		    end
-				api.sendMediaId(msg.chat.id, output, "photo", true, "Today's NASA Image")
+				api.sendMediaId(msg.chat.id, output, "photo", msg, "Today's NASA Image")
 
 			elseif blocks[2] == 'data' then
+				api.sendChatAction(chat_id, "typing")
 				local url = base_url .. "&data"
 				local output, res = HTTP.request(url)
 		    if not output or res ~= 200 or output:len() == 0 then

@@ -18,6 +18,7 @@ end
 
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] == 'talk' then
+    api.sendChatAction(chat_id, "typing")
     local base_url = "http://barreeeiroo.ga/BarrePolice/cleverbot/"
     local key = config.cleverbot_api_key
     local input = urlencode(blocks[2])

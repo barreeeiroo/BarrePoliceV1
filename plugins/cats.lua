@@ -8,12 +8,13 @@ local plugin = {}
 
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] == 'cat' or blocks[1] == 'cats' then
+		api.sendChatAction(chat_id, "upload_photo")
 		local url = "http://barreeeiroo.ga/BarrePolice/cats/"
 		local output, res = HTTP.request(url)
 		if not output or res ~= 200 or output:len() == 0 then
 		      output, res = HTTP.request(url)
 		end
-		api.sendMediaId(msg.chat.id, output, "photo", true, "Cat's are our Gods!")
+		api.sendMediaId(msg.chat.id, output, "photo", msg, "Cat's are our Gods!")
   end
 end
 
