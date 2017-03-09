@@ -33,7 +33,7 @@ return {
 		admin_mode = false,
 		debug_connections = false,
 		realm_max_members = 60,
-		realm_max_subgroups = 1
+		realm_max_subgroups = 6
 	},
 	channel = '@Barreeeiroo_Ch', --channel username with the '@'
 	source_code = 'https://github.com/barreeeiroo/BarrePolice/',
