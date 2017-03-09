@@ -35,6 +35,8 @@ local function request(imageUrl)
    }
    if code ~= 200 then return "", code end
    local body = table.concat(respbody)
+   print(body)
+   print(code)
    return body, code
 end
 
@@ -48,7 +50,6 @@ local function parseData(data)
    else
       local response = "Skin Colors Level: `" .. jsonBody["Skin Colors"] .. "`\nContains Bad Words: `" .. jsonBody["Is Contain Bad Words"] .. "`\n\n*Is Porn:* " .. jsonBody["Is Porn"] .. "\n*Reason:* _" .. jsonBody["Reason"] .. "_"
    end
-   print(response)
    return response
 end
 
