@@ -48,6 +48,7 @@ local function parseData(data)
    else
       local response = "Skin Colors Level: `" .. jsonBody["Skin Colors"] .. "`\nContains Bad Words: `" .. jsonBody["Is Contain Bad Words"] .. "`\n\n*Is Porn:* " .. jsonBody["Is Porn"] .. "\n*Reason:* _" .. jsonBody["Reason"] .. "_"
    end
+   print(response)
    return response
 end
 
@@ -59,7 +60,7 @@ function plugin.onTextMessage(msg, blocks)
       api.sendChatAction(msg.chat.id, "typing")
       local request_data = request(blocks[2])
       local parse_data = parseData(request_data)
-      print(parse_data)
+      --api.sendMessage(msg.chat.id, parse_data)
     end
   end
 end
