@@ -52,8 +52,8 @@ local function send_pokemon(query, msg, chat_id)
       receiver = receiver,
       text = text
     }
-    api.sendMediaId(chat_id, image, "photo", false, false)
-    api.sendMessage(chat_id, text, true, nil, false, false)
+    api.sendMediaId(chat_id, image, "photo", msg, false)
+    api.sendReply(msg, text, true, nil, true)
   else
     api.sendReply(msg, text, true, nil, true)
   end
