@@ -52,7 +52,7 @@ local function send_pokemon(query, msg, chat_id)
       receiver = receiver,
       text = text
     }
-    api.sendMediaId(chat_id, image, "photo", msg, false)
+    api.sendMediaId(chat_id, image, "photo", msg.message_id, false)
     api.sendReply(msg, text, true, nil, true)
   else
     api.sendReply(msg, text, true, nil, true)
@@ -62,8 +62,10 @@ end
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] == 'pokedex' then
     if not blocks[2] then
-
+      local message = "*Avaliable Commands:*\n\n- /pokedex `ID`/`name` - _Sends the info about that Pokemon_"
+			api.sendReply(msg, message, true, nil, true)
     else
+      api.sendChatAction(msg.chat.id, "typing")
       local query = blocks[2]
       return send_pokemon(query, msg, msg.chat.id)
     end

@@ -42,7 +42,7 @@ end
 
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] == 'yoda' then
-    api.sendChatAction(chat_id, "typing")
+    api.sendChatAction(msg.chat.id, "typing")
     if not blocks[2] then
       api.sendReply(msg, request("You have to say something to me"), true, reply_markup)
     else

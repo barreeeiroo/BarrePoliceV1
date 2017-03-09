@@ -14,7 +14,7 @@ function plugin.onTextMessage(msg, blocks)
 		if not output or res ~= 200 or output:len() == 0 then
 		      output, res = HTTP.request(url)
 		end
-		api.sendMediaId(msg.chat.id, output, "photo", msg, "Cat's are our Gods!")
+		api.sendMediaId(msg.chat.id, output, "photo", msg.message_id, "Cat's are our Gods!")
   end
 end
 
