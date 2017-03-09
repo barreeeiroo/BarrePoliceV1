@@ -56,9 +56,10 @@ function plugin.onTextMessage(msg, blocks)
     if not blocks[2] then
       api.sendReply(msg, "You have to _send me_ an *Image URL after the command*", true, reply_markup)
     else
+      api.sendChatAction(msg.chat.id, "typing")
       local request_data = request(blocks[2])
       local parse_data = parseData(request_data)
-      api.sendReply(msg, parse_data, true, reply_markup)
+      api.sendReply(msg, parse_data, true, nil, true)
     end
   end
 end
