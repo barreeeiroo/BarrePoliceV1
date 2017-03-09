@@ -59,7 +59,7 @@ function plugin.onTextMessage(msg, blocks)
       api.sendChatAction(msg.chat.id, "typing")
       local request_data = request(blocks[2])
       local parse_data = parseData(request_data)
-      api.sendMessage(msg.chat.id, parse_data)
+      print(parse_data)
     end
   end
 end
