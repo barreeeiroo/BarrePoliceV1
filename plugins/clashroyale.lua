@@ -15,7 +15,7 @@ end
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] then
     if not blocks[2] then
-      api.sendReply(msg, "*Avaliable Commands:*\n\n- /cr `arena` {`ID`} - _Sends a list of all Arenas, or the Arena ID information_\n- /cr `card` {`ID`/`IDname`} - _Sends a list of all Cards, or the Card ID information_\n- /cr `league` {`ID`} - _Sends a list of all Leagues, or the League ID information_", true, nil, true)
+      api.sendReply(msg, "*Avaliable Commands:*\n\n- /cr `arena` {`ID`} - _Sends a list of all Arenas, or the Arena ID information_\n- /cr `card` {`ID`/`IDname`} - _Sends a list of all Cards, or the Card ID information_\n- /cr `league` {`ID`} - _Sends a list of all Leagues, or the League ID information_\n- /cr `emotions` {`ID`/`IDName`} - _Sends a list of all Emotions, or that emotion in a GIF_\n- /cr `deck` - _Sends a random deck_", true, nil, true)
     else
       if blocks[2] == "arena" or blocks[2] == "arenas" then
         if blocks[3] then
@@ -183,7 +183,7 @@ function plugin.onTextMessage(msg, blocks)
         api.sendReply(msg, output, true, nil, true)
       else
         api.sendChatAction(msg.chat.id, "typing")
-        api.sendReply(msg, "I only support arenas, cards, leagues, emotions or deck", true, nil, true)
+        api.sendReply(msg, "Unrecognized request", true, nil, true)
       end
     end
   end

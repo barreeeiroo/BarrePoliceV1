@@ -366,6 +366,26 @@ This plugin will transform everything you say into Yoda Words. Test it!
 The avaliable commands are:
 - /yoda `something` - _Transform your _`something`_ into a Yoda's words_]])
 
+	elseif key == 'pokemon' then
+		return _([[*Pokemon Plugin*
+
+If you are a fan of Pokemon, this plugin is for you!
+It has multiple functions, like a Pokedex, and we are working to add more!
+The avaliable commands right now are:
+- /pokedex `ID`/`Name` - _Sends the Pokedex info about that pokemon_]])
+
+	elseif key == 'clashroyale' then
+		return _([[*ClashRoyale Plugin*
+
+Are you another person that plays ClashRoyale? So you will find this plugin very useful.
+It uses an API to receive all stats and information about a lot of data of the game. Test it!
+The avaliable commands right now are:
+- /cr `arena` {`ID`} - _Sends a list of all Arenas, or the Arena ID information_
+- /cr `card` {`ID`/`IDname`} - _Sends a list of all Cards, or the Card ID information_
+- /cr `league` {`ID`} - _Sends a list of all Leagues, or the League ID information_
+- /cr `emotions` {`ID`/`IDName`} - _Sends a list of all Emotions, or that emotion in a GIF_
+- /cr `deck` - _Sends a random deck_]])
+
 	elseif key == 'none' then
 		return _([[`None`]])
 
@@ -420,8 +440,12 @@ local function dk_others()
 	    [_("Cats")] = 'cats'
 	  },
 		{
-			[_("Porn Detector")] = 'isX',
-	    [_("Ping")] = 'ping'
+			[_("Clash Royale")] = 'clashroyale',
+	    [_("Porn Detector")] = 'isX'
+	  },
+		{
+	    [_("Ping")] = 'ping',
+			[_("Pokemon")] = 'pokemon'
 	  },
 		{
 			[_("Porn 🔞")] = 'porn',
