@@ -69,7 +69,7 @@ return {
 		-- MY CUSTOM PLUGINS
 		'apod',
 		'cats',
-		'clashroyale'
+		'clashroyale',
 		'isX',
 		'ping',
 		'pokemon',
