@@ -26,7 +26,8 @@ function plugin.onTextMessage(msg, blocks)
             else
               api.sendChatAction(msg.chat.id, "upload_photo")
               if blocks[3]=="11" then
-                local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas&id="..blocks[3]+1.."&image")
+                tmp = blocks[3]+1
+                local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas&id="..tmp.."&image")
               else
                 local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas&id="..blocks[3].."&image")
               end
