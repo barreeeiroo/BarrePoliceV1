@@ -28,7 +28,7 @@ local function send_pokemon(query, msg, chat_id)
   if blocks[2] == "M4STER_ANGEL" then
     api.sendMediaId(chat_id, "../files/pokedex-m4sterAngel.jpg", "photo", msg.message_id, false)
     return api.sendReply(msg, '*Pokédex ID*: `0`\n*Name:* M4STER_ANGEL\n*Weight:* √-3 kg\n*Height:* 5m\n*Speed:* 69 Km/s', true, nil, true)
-  elseif blocks[2] == "Barreeeiroo" or blocks[2] == "barreeeiroo" thenthen
+  elseif blocks[2] == "Barreeeiroo" or blocks[2] == "barreeeiroo" then
   api.sendMediaId(chat_id, "../files/pokedex-barreeeiroo.jpg", "photo", msg.message_id, false)
   return api.sendReply(msg, '*Pokédex ID*: `0`\n*Name:* Diego Barreiro _AKA Barreeeiroo_\n*Weight:* 50 kg\n*Height:* 1.85m\n*Speed:* 87 Km/h', true, nil, true)
   end
