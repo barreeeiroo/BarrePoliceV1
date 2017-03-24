@@ -1,6 +1,7 @@
 local api = require 'methods'
 local redis = require 'redis'
 local clr = require 'term.colors'
+local file = io.open("logs.txt", "a")
 local u, config, plugins, last_update, last_cron
 db = redis.connect('127.0.0.1', 6379)
 
@@ -39,7 +40,6 @@ function bot_init(on_reload) -- The function run when the bot is started or relo
 		table.insert(plugins, p)
 	end
 
-	local file = io.open("logs.txt", "a")
 	print('\n'..clr.blue..'BOT RUNNING:'..clr.reset, clr.red..'[@'..bot.username .. '] [' .. bot.first_name ..'] ['..bot.id..']'..clr.reset..'\nAt '.. os.date("%A, %d of %B in %Y at %X"))
 
 	last_update = last_update or 0 -- Set loop variables: Update offset
