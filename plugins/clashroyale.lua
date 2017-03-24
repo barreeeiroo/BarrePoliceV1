@@ -25,12 +25,7 @@ function plugin.onTextMessage(msg, blocks)
               api.sendReply(msg, "Too big Arena ID. The maximum ID is 11", true, nil, true)
             else
               api.sendChatAction(msg.chat.id, "upload_photo")
-              if blocks[3]=="11" then
-                tmp = blocks[3]+1
-                local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas&id="..tmp.."&image")
-              else
-                local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas&id="..blocks[3].."&image")
-              end
+              local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas&id="..blocks[3].."&image")
               if not output or res ~= 200 or output:len() == 0 then
                     output, res = HTTP.request(url)
               end
