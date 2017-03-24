@@ -20,9 +20,9 @@ function plugin.onTextMessage(msg, blocks)
       if blocks[2] == "arena" or blocks[2] == "arenas" then
         if blocks[3] then
           if tonumber(blocks[3]) ~= nil then
-            if tonumber(blocks[3]) >= 11 then
+            if tonumber(blocks[3]) >= 12 then
               api.sendChatAction(msg.chat.id, "typing")
-              api.sendReply(msg, "Too big Arena ID. The maximum ID is 10", true, nil, true)
+              api.sendReply(msg, "Too big Arena ID. The maximum ID is 11", true, nil, true)
             else
               api.sendChatAction(msg.chat.id, "upload_photo")
               local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas&id="..blocks[3].."&image")
@@ -52,9 +52,9 @@ function plugin.onTextMessage(msg, blocks)
       elseif blocks[2] == "card" or blocks[2] == "cards" then
         if blocks[3] then
           if tonumber(blocks[3]) ~= nil then
-            if tonumber(blocks[3]) >= 71 then
+            if tonumber(blocks[3]) >= 75 then
               api.sendChatAction(msg.chat.id, "typing")
-              api.sendReply(msg, "Too big Card ID. The maximum ID is 70", true, nil, true)
+              api.sendReply(msg, "Too big Card ID. The maximum ID is 74", true, nil, true)
             else
               api.sendChatAction(msg.chat.id, "upload_photo")
               local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?cards&id="..blocks[3].."&image")
