@@ -43,6 +43,7 @@ function plugin.onTextMessage(msg, blocks)
             api.sendReply(msg, "The 3rd input must be a number", true, nil, true)
           end
         else
+          api.sendChatAction(msg.chat.id, "typing")
           local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas")
           if not output or res ~= 200 or output:len() == 0 then
                 output, res = HTTP.request(url)
@@ -82,13 +83,6 @@ function plugin.onTextMessage(msg, blocks)
             end
             if outputT == "Card not found" then
               api.sendReply(msg, outputT, true, nil, true)
-            elseif outputT == "I only have the image" then
-              api.sendChatAction(msg.chat.id, "upload_photo")
-              local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?cards&id="..blocks[3].."&image")
-              if not output or res ~= 200 or output:len() == 0 then
-                    output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?cards&id="..blocks[3].."&image")
-              end
-              api.sendMediaId(msg.chat.id, output, "photo", msg.message_id, "I only have the image")
             else
               api.sendChatAction(msg.chat.id, "upload_photo")
               local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?cards&id="..blocks[3].."&image")
@@ -110,6 +104,7 @@ function plugin.onTextMessage(msg, blocks)
             end
           end
         else
+          api.sendChatAction(msg.chat.id, "typing")
           local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?cards")
           if not output or res ~= 200 or output:len() == 0 then
                 output, res = HTTP.request(url)
@@ -128,12 +123,21 @@ function plugin.onTextMessage(msg, blocks)
               if not output or res ~= 200 or output:len() == 0 then
                     output, res = HTTP.request(url)
               end
-              api.sendMediaId(msg.chat.id, output, "photo", msg.message_id, false)
+              api.sendMediaId(msg.chat.id, output, "photo", msg.message_id, "League "..blocks[3])
+
+              api.sendChatAction(msg.chat.id, "typing")
+              local output2, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?leagues&id="..blocks[3])
+              if not output2 or res ~= 200 or output:len() == 0 then
+                    output2, res = HTTP.request(url)
+              end
+              api.sendReply(msg, output2, true, nil, true)
             end
           else
-            api.sendReply(msg, output2, true, nil, true)
+            api.sendChatAction(msg.chat.id, "typing")
+            api.sendReply(msg, "The 3rd input must be a number", true, nil, true)
           end
         else
+          api.sendChatAction(msg.chat.id, "typing")
           local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?leagues")
           if not output or res ~= 200 or output:len() == 0 then
                 output, res = HTTP.request(url)
