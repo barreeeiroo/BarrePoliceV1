@@ -15,7 +15,7 @@ end
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] then
     if not blocks[2] then
-      api.sendReply(msg, "*Avaliable Commands:*\n\n- /cr `arena` {`ID`} - _Sends a list of all Arenas, or the Arena ID information_\n- /cr `card` {`ID`/`IDname`} - _Sends a list of all Cards, or the Card ID information_\n- /cr `league` {`ID`} - _Sends a list of all Leagues, or the League ID information_\n- /cr `emotions` {`ID`/`IDName`} - _Sends a list of all Emotions, or that emotion in a GIF_\n- /cr `deck` - _Sends a random deck_", true, nil, true)
+      api.sendReply(msg, "*Avaliable Commands:*\n\n- /cr `arena` {`ID`} - _Sends a list of all Arenas, or the Arena ID information_\n- /cr `card` {`ID`/`IDname`} - _Sends a list of all Cards, or the Card ID information_\n- /cr `league` {`ID`} - _Sends a list of all Leagues, or the League ID information_\n- /cr `emotions` {`ID`/`IDName`} - _Sends a list of all Emotions, or that emotion in a GIF_\n- /cr `deck` - _Sends a random deck_\n- /cr `chest`\n  `arena` {`ID`} - _Sends the list of all avaliable chests for that arena_\n  `type` {`ID`/`IDName`} - _Sends the list of all avaliable chests matching that type_\n  `image` {`ID`/`IDName`} - _Sends the image of that chest_\n  `info` {`ID`/`IDName`} {`ArenaID`} - _Sends the info of that chest_", true, nil, true)
     else
       if blocks[2] == "arena" or blocks[2] == "arenas" then
         if blocks[3] then
@@ -43,7 +43,6 @@ function plugin.onTextMessage(msg, blocks)
             api.sendReply(msg, "The 3rd input must be a number", true, nil, true)
           end
         else
-          api.sendChatAction(msg.chat.id, "typing")
           local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?arenas")
           if not output or res ~= 200 or output:len() == 0 then
                 output, res = HTTP.request(url)
@@ -185,6 +184,131 @@ function plugin.onTextMessage(msg, blocks)
               output, res = HTTP.request(url)
         end
         api.sendReply(msg, output, true, nil, true)
+      elseif blocks[2] == "chest" or blocks[3] == "chests" then
+        if blocks[3] then
+          if blocks[3] == "arena" then
+            if blocks[4] then
+              if tonumber(blocks[4]) ~= nil then
+                if tonumber(blocks[4]) > 11 then
+                  api.sendReply(msg, "Too big Arena ID. The maximum allowed is 11", true, nil, true)
+                else
+                  api.sendChatAction(msg.chat.id, "typing")
+                  local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&arena="..blocks[4])
+                  if not output or res ~= 200 or output:len() == 0 then
+                        output, res = HTTP.request(url)
+                  end
+                  api.sendReply(msg, output, true, nil, true)
+                end
+              else
+                api.sendReply(msg, "The Arena input must be a number", true, nil, true)
+              end
+            else
+              api.sendReply(msg, "You must add an Arena ID", true, nil, true)
+            end
+          elseif blocks[3] == "type" then
+            if blocks[4] then
+              if tonumber(blocks[4]) ~= nil then
+                if tonumber(blocks[4]) > 10 then
+                  api.sendReply(msg, "Too big Type ID. The maximum allowed is 10", true, nil, true)
+                else
+                  local outputI, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&image&id="..blocks[4].."&man")
+                  if not outputI or res ~= 200 or outputI:len() == 0 then
+                        outputI, res = HTTP.request(url)
+                  end
+                  if outputI == "Chest not found" then
+
+                  else
+                    api.sendChatAction(msg.chat.id, "upload_photo")
+                    api.sendMediaId(msg.chat.id, outputI, "photo", msg.message_id, false)
+                  end
+                  api.sendChatAction(msg.chat.id, "typing")
+                  local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&id="..blocks[4])
+                  if not output or res ~= 200 or output:len() == 0 then
+                        output, res = HTTP.request(url)
+                  end
+                  api.sendReply(msg, output, true, nil, true)
+                end
+              else
+                api.sendReply(msg, "Type must be a number", true, nil, true)
+              end
+            else
+              api.sendReply(msg, "You must add a Type ID (to get IDs: /cr chest)", true, nil, true)
+            end
+          elseif blocks[3] == "image" then
+            if blocks[4] then
+              api.sendChatAction(msg.chat.id, "typing")
+              local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&image&id="..blocks[4])
+              if not output or res ~= 200 or output:len() == 0 then
+                    output, res = HTTP.request(url)
+              end
+              if output == "Chest not found" then
+                api.sendReply(msg, output, true, nil, true)
+              else
+                api.sendChatAction(msg.chat.id, "upload_photo")
+                api.sendMediaId(msg.chat.id, output, "photo", msg.message_id, false)
+              end
+            else
+              api.sendChatAction(msg.chat.id, "typing")
+              local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&image")
+              if not output or res ~= 200 or output:len() == 0 then
+                    output, res = HTTP.request(url)
+              end
+              api.sendReply(msg, output, true, nil, true)
+            end
+          elseif blocks[3] == "info" then
+            if blocks[4] and blocks[5] then
+              if tonumber(blocks[4]) ~= nil then
+                if tonumber(blocks[4]) > 10 then
+                  return api.sendReply(msg, "Too big Chest Type ID. The maximum allowed is 10", true, nil, true)
+                end
+              end
+              if tonumber(blocks[5]) ~= nil then
+                if tonumber(blocks[5]) > 11 then
+                  return api.sendReply(msg, "Too big Arena ID. The maximum allowed is 11", true, nil, true)
+                else
+                  if blocks[4] == "season-reward" then
+                    api.sendChatAction(msg.chat.id, "upload_photo")
+                    local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&image&id="..blocks[4].."&arena="..blocks[5])
+                    if not output or res ~= 200 or output:len() == 0 then
+                          output, res = HTTP.request(url)
+                    end
+                    local outputI, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&image&id=draft")
+                    if not outputI or res ~= 200 or output:len() == 0 then
+                          outputI, res = HTTP.request(url)
+                    end
+                    api.sendMediaId(msg.chat.id, outputI, "photo", msg.message_id, false)
+                    api.sendReply(msg, output, true, nil, true)
+                  else
+                    api.sendChatAction(msg.chat.id, "upload_photo")
+                    local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&image&id="..blocks[4].."&arena="..blocks[5])
+                    if not output or res ~= 200 or output:len() == 0 then
+                          output, res = HTTP.request(url)
+                    end
+                    local outputI, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests&image&id="..blocks[4].."&man")
+                    if not outputI or res ~= 200 or output:len() == 0 then
+                          outputI, res = HTTP.request(url)
+                    end
+                    api.sendMediaId(msg.chat.id, outputI, "photo", msg.message_id, false)
+                    api.sendReply(msg, output, true, nil, true)
+                  end
+                end
+              else
+                api.sendReply(msg, "The 5th input must be a number (Arena ID)", true, nil, true)
+              end
+            else
+              api.sendChatAction(msg.chat.id, "typing")
+              api.sendReply(msg, "*Usage:*\n\n- /cr _chest info_  `chestType`/`chestID` `arenaID`", true, nil, true)
+            end
+          end
+        else
+          api.sendChatAction(msg.chat.id, "typing")
+          local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?chests")
+          if not output or res ~= 200 or output:len() == 0 then
+                output, res = HTTP.request(url)
+          end
+          api.sendReply(msg, output, true, nil, true)
+          api.sendReply(msg, "You can add too after the _"..blocks[2].."_ `arena`, `type`, `info` or `image` to get more info", true, nil, true)
+        end
       else
         api.sendChatAction(msg.chat.id, "typing")
         api.sendReply(msg, "Unrecognized request", true, nil, true)
@@ -195,9 +319,13 @@ end
 
 plugin.triggers = {
 	onTextMessage = {
+    config.cmd..'([C/c]lash[R/r]oyale) (.*) (.*) (.*) (.*)$',
+    config.cmd..'([C/c]lash[R/r]oyale) (.*) (.*) (.*)$',
     config.cmd..'([C/c]lash[R/r]oyale) (.*) (.*)$',
 		config.cmd..'([C/c]lash[R/r]oyale) (.*)$',
     config.cmd..'([C/c]lash[R/r]oyale)$',
+    config.cmd..'([C/c][R/r]) (.*) (.*) (.*) (.*)$',
+    config.cmd..'([C/c][R/r]) (.*) (.*) (.*)$',
 		config.cmd..'([C/c][R/r]) (.*) (.*)$',
 		config.cmd..'([C/c][R/r]) (.*)$',
     config.cmd..'([C/c][R/r])$'
