@@ -8,6 +8,7 @@ local json = require('dkjson')
 local plugin = {}
 
 function plugin.onTextMessage(msg, blocks)
+  api.sendChatAction(msg.chat.id, "typing")
   local input = blocks[2]
   if not input then
       return api.sendReply(
@@ -42,7 +43,8 @@ function plugin.onTextMessage(msg, blocks)
           "I couldn't find that person or he has not profile image. Maybe you wrote wrong the username"
       )
   end
-
+  
+  api.sendChatAction(msg.chat.id, "upload_photo")
   return api.sendMediaId(msg.chat.id, str:match('%<a href%=%"%#%" onclick%=%"window%.open%(%\'(https%:%/%/scontent%.cdninstagram%.com%/.-)%\'%, %\'%_blank%\'%)%;%"%>'), "photo", msg.message_id, "@"..input.." on Instagram")
 end
 
