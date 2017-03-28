@@ -160,7 +160,7 @@ function plugin.onTextMessage(msg, blocks)
           else
             if blocks[3] == "angrer" or blocks[3] == "cry" or blocks[3] == "laugh" or blocks[3] == "thumbs-up" then
               api.sendChatAction(msg.chat.id, "upload_photo")
-              local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?emmotions&id="..blocks[3])
+              local output, res = HTTP.request("http://barreeeiroo.ga/BarrePolice/ClashRoyale/?emotions&id="..blocks[3])
               if not output or res ~= 200 or output:len() == 0 then
                     output, res = HTTP.request(url)
               end
