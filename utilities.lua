@@ -15,6 +15,12 @@ local utf8 = utf8 or require('lua-utf8')
 
 local utilities = {}
 
+local clock = os.clock
+function sleep(n)  -- seconds
+  local t0 = clock()
+  while clock() - t0 <= n do end
+end
+
 -- Escape markdown for Telegram. This function makes non-clickable usernames,
 -- hashtags, commands, links and emails, if only_markup flag isn't setted.
 function string:escape(only_markup)
