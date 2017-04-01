@@ -155,7 +155,12 @@ local function on_msg_receive(msg, callback) -- The fn run whenever a message is
 
 					if config.bot_settings.stream_commands then --print some info in the terminal
 						print(clr.reset..clr.blue..'['..os.date('%X')..']'..clr.red..' '..trigger..clr.reset..' '..msg.from.first_name..' ['..msg.from.id..'] -> ['..msg.chat.id..']')
-						file:write(os.date("%d/%m/%Y %H:%M:%S") .."\n".. msg.text.." - "..msg.from.first_name.." "..msg.from.last_name.." ["..msg.from.id..'] -> ['..msg.chat.id..']', "\n\n")
+						if msg.from.last_name then
+							msg_from_last_name = msg.from.last_name
+						else
+							msg_from_last_name = ""
+						end
+						file:write(os.date("%d/%m/%Y %H:%M:%S") .."\n".. msg.text.." - "..msg.from.first_name.." "..msg_from_last_name.." ["..msg.from.id..'] -> ['..msg.chat.id..']', "\n\n")
 						file:flush()
 					end
 
