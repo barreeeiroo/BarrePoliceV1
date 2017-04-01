@@ -66,7 +66,7 @@ return {
 		'welcome',
 		'admin',
 
-		-- MY CUSTOM PLUGINS
+		-- BarrePolice PLUGINS --
 		'apod',
 		'cats',
 		'clashroyale',
@@ -77,11 +77,13 @@ return {
 		'porn',
 		'rss',
 		'shout',
-		'talk',
 		'yoda',
 		-- END
 
-		'extra', --must be the last plugin in the list.
+		-- AI PLUGINS
+		'extra',
+		'talk',
+		-- END
 	},
 	multipurpose_plugins = {},
 	available_languages = {
