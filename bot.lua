@@ -2,7 +2,7 @@ local api = require 'methods'
 local redis = require 'redis'
 local clr = require 'term.colors'
 local file = io.open("logs.txt", "a")
-local u, config, plugins, last_update, last_cron
+local u, config, plugins, last_update, last_cron, last_min_cron
 db = redis.connect('127.0.0.1', 6379)
 
 function bot_init(on_reload) -- The function run when the bot is started or reloaded.
@@ -44,6 +44,7 @@ function bot_init(on_reload) -- The function run when the bot is started or relo
 
 	last_update = last_update or 0 -- Set loop variables: Update offset
 	last_cron = last_cron or os.time() -- the time of the last cron job
+	last_min_cron = last_min_cron or os.time()
 
 	if on_reload then
 		return #plugins
@@ -51,7 +52,7 @@ function bot_init(on_reload) -- The function run when the bot is started or relo
 		api.sendAdmin('*Bot started!*\n_'..os.date('On %A, %d %B %Y\nAt %X')..'_\n'..#plugins..' plugins loaded', true)
 		start_timestamp = os.time()
 		current = {h = 0}
-		last = {h = 0}
+		last = {h = 0, m = 0}
 	end
 end
 
@@ -420,12 +421,27 @@ while true do -- Start a loop while the bot should be running.
 		last_cron = os.date('%H')
 		last.h = current.h
 		current.h = 0
-		print(clr.yellow..'Cron...'..clr.reset)
+		print(clr.yellow..'Hourly Cron...'..clr.reset)
 		for i,v in ipairs(plugins) do
 			if v.cron then -- Call each plugin's cron function, if it has one.
 				local res, err = pcall(v.cron)
 				if not res then
           			api.sendLog('An #error occurred (cron).\n'..err)
+					return
+				end
+			end
+		end
+	end
+	if last_min_cron ~= os.date('%M') then -- Run cron jobs every hour.
+		last_min_cron = os.date('%M')
+		last.m = last.m
+		current.m = 0
+		print(clr.yellow..'Minutly Cron...'..clr.reset.." - "..os.date("%H:%M:%S"))
+		for i,v in ipairs(plugins) do
+			if v.min_cron then -- Call each plugin's cron function, if it has one.
+				local res, err = pcall(v.min_cron)
+				if not res then
+          			api.sendLog('An #error occurred (min_cron).\n'..err)
 					return
 				end
 			end
