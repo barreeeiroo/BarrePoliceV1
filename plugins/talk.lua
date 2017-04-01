@@ -17,14 +17,11 @@ function urlencode(str)
 end
 
 function plugin.onTextMessage(msg, blocks)
-	if blocks[1] == 'talk' then
-    if not blocks[2] then
-      return 
-    end
-    api.sendChatAction(msg.chat.id, "typing")
+  if msg.chat.type == 'private' then
+  	api.sendChatAction(msg.chat.id, "typing")
     local base_url = "http://barreeeiroo.ga/BarrePolice/cleverbot/"
     local key = config.cleverbot_api_key
-    local input = urlencode(blocks[2])
+    local input = urlencode(blocks[1])
 
     local url = base_url .. "?key=" .. key .. "&input=" .. input
 
@@ -35,14 +32,13 @@ function plugin.onTextMessage(msg, blocks)
         output, res = HTTP.request(url)
     end
 
-    api.sendReply(msg, output, true, reply_markup)
+    api.sendReply(msg, "`"..output.."`", true, reply_markup)
   end
 end
 
 plugin.triggers = {
 	onTextMessage = {
-		config.cmd..'(talk) (.*)$',
-    config.cmd..'(talk)$',
+		'(.*)$'
 	}
 }
 
