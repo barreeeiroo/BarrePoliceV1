@@ -75,6 +75,7 @@ return {
 		'ping',
 		'pokemon',
 		'porn',
+		'rss',
 		'shout',
 		'talk',
 		'yoda',
