@@ -18,6 +18,9 @@ end
 
 function plugin.onTextMessage(msg, blocks)
 	if blocks[1] == 'talk' then
+    if not blocks[2] then
+      return 
+    end
     api.sendChatAction(msg.chat.id, "typing")
     local base_url = "http://barreeeiroo.ga/BarrePolice/cleverbot/"
     local key = config.cleverbot_api_key
@@ -38,7 +41,8 @@ end
 
 plugin.triggers = {
 	onTextMessage = {
-		config.cmd..'(talk) (.*)$'
+		config.cmd..'(talk) (.*)$',
+    config.cmd..'(talk)$',
 	}
 }
 
