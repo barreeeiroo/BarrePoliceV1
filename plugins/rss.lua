@@ -270,8 +270,14 @@ function plugin.min_cron()
                 else
                     content = plugin.unescape_html(content)
                 end
-            elseif entry.summary then
-
+            elseif entry.summary or entry.description then
+              summary_text = entry.summary or entry.description
+              content = summary_text:gsub('<br>', '\n'):gsub('%b<>', '')
+              if summary_text:len() > 500 then
+                  content = rss.unescape_html(content):sub(1, 500) .. '...'
+              else
+                  content = rss.unescape_html(content)
+              end
             else
                 content = ''
             end
@@ -315,24 +321,27 @@ end
 function plugin.onTextMessage(msg, blocks)
     local input = blocks[2]
     if not input then
-      return api.sendReply(
+      api.sendReply(
         msg,
-        "Avaliable Commands:\n\n- /rss `sub` {_RSS Feed URL_} - Subscribe to that feed\n- /rss `del` {_RSS ID_} - Remove the subscription of that RSS (to get the list of subscriptions: /rss _del_)"
+        "Avaliable Commands:\n\n- /rss `sub` {_RSS Feed URL_} - Subscribe to that feed\n- /rss `del` {_RSS ID_} - Remove the subscription of that RSS (to get the list of subscriptions: /rss _del_)",
+        true,
+        nil,
+        true
     )
     end
     if input == 'del' and not blocks[3] then
         local output, keyboard = plugin.get_subs(msg.chat.id)
-        return api.sendMessage(
+        api.sendMessage(
             msg.chat.id,
             output
         )
     elseif input == 'sub' and not blocks[3] then
-        return api.sendReply(
+        api.sendReply(
             msg,
             'Please specify the RSS feed you would like to subscribe to using /rss sub <url>.'
         )
     elseif input == 'sub' and blocks[3] then
-        return api.sendReply(
+        api.sendReply(
             msg,
             plugin.subscribe(
                 msg.chat.id,
@@ -341,7 +350,7 @@ function plugin.onTextMessage(msg, blocks)
             'html'
         )
     elseif input == 'del' and blocks[3] then
-        return api.sendReply(
+        api.sendReply(
             msg,
             plugin.unsubscribe(
                 msg.chat.id,
@@ -351,18 +360,18 @@ function plugin.onTextMessage(msg, blocks)
     elseif input == 'reload' then
       if u.is_superadmin(msg.chat.id) then
         plugin.min_cron()
-        return api.sendReply(
+        api.sendReply(
           msg,
           'Checking for RSS updates...'
         )
       else
-        return api.sendReply(
+        api.sendReply(
         msg,
           "You are not an admin!"
         )
       end
     else
-        return api.sendReply(
+        api.sendReply(
             msg,
             "Unrecognized Request"
         )
