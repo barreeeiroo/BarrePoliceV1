@@ -60,6 +60,15 @@ function utilities.plugins_names()
   return files
 end
 
+function utilities.candir(directory)
+  local i, t, popen = 0, {}, io.popen
+  for filename in popen('ls -a "'..directory..'"'):lines() do
+    i = i + 1
+    t[i] = filename
+  end
+  return t
+end
+
 -- Escape markdown for Telegram. This function makes non-clickable usernames,
 -- hashtags, commands, links and emails, if only_markup flag isn't setted.
 function string:escape(only_markup)
