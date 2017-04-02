@@ -72,6 +72,7 @@ return {
 		'clashroyale',
 		'instagram',
 		'isX',
+		'plugins'
 		'ping',
 		'pokemon',
 		'porn',

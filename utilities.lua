@@ -49,6 +49,15 @@ function utilities.print_r(t)
     print()
 end
 
+function utilities.scandir(directory)
+  local i, t, popen = 0, {}, io.popen
+  for filename in popen('ls -a "'..directory..'"'):lines() do
+    i = i + 1
+    t[i] = filename
+  end
+  return t
+end
+
 function utilities.plugins_names()
   local files = {}
   for k, v in pairs(utilities.scandir("plugins")) do
@@ -58,15 +67,6 @@ function utilities.plugins_names()
     end
   end
   return files
-end
-
-function utilities.candir(directory)
-  local i, t, popen = 0, {}, io.popen
-  for filename in popen('ls -a "'..directory..'"'):lines() do
-    i = i + 1
-    t[i] = filename
-  end
-  return t
 end
 
 -- Escape markdown for Telegram. This function makes non-clickable usernames,
