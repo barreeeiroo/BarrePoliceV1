@@ -15,7 +15,7 @@ local utf8 = utf8 or require('lua-utf8')
 
 local utilities = {}
 
-function utilities.print_r(t)  
+function utilities.print_r(t)
     local print_r_cache={}
     local function sub_print_r(t,indent)
         if (print_r_cache[tostring(t)]) then
@@ -47,6 +47,17 @@ function utilities.print_r(t)
         sub_print_r(t,"  ")
     end
     print()
+end
+
+function utilities.plugins_names()
+  local files = {}
+  for k, v in pairs(scandir("plugins")) do
+    -- Ends with .lua
+    if (v:match(".lua$")) then
+      table.insert(files, v)
+    end
+  end
+  return files
 end
 
 -- Escape markdown for Telegram. This function makes non-clickable usernames,

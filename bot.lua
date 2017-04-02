@@ -357,7 +357,7 @@ local function parseMessageFunction(update)
 				msg.reply.text = msg.reply.caption
 			end
 		end
-	--[[elseif update.inline_query then
+	elseif update.inline_query then
 		msg = update.inline_query
 		msg.inline = true
 		msg.chat = {id = msg.from.id, type = 'inline', title = 'inline'}
@@ -370,7 +370,7 @@ local function parseMessageFunction(update)
 		msg.chat = {type = 'inline', id = msg.from.id, title = msg.from.first_name}
 		msg.message_id = msg.inline_message_id
 		msg.date = os.time()
-		function_key = 'onChosenInlineQuery']]
+		function_key = 'onChosenInlineQuery'
 	elseif update.callback_query then
 		msg = update.callback_query
 		msg.cb = true
@@ -439,7 +439,7 @@ while true do -- Start a loop while the bot should be running.
 	end
 	if last_min_cron ~= os.date('%M') then -- Run cron jobs every hour.
 		last_min_cron = os.date('%M')
-		last.m = last.m
+		last.m = current.m
 		current.m = 0
 		print(clr.yellow..'Minutly Cron...'..clr.reset.." - "..os.date("%H:%M:%S"))
 		for i,v in ipairs(plugins) do
