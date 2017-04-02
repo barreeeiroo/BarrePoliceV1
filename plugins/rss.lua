@@ -10,7 +10,6 @@ local json = require('dkjson')
 local feedparser = require('feedparser')
 local tools = require('telegram-bot-lua.tools')
 
-
 local plugin = {}
 
 function plugin.tail(n, k)
@@ -45,7 +44,7 @@ function plugin.to_utf8(a)
 end
 
 function plugin.unescape_html(str)
-    return str:gsub('&lt;', '<'):gsub('&gt;', '>'):gsub('&quot;', '"'):gsub('&apos;', '\''):gsub('&#(%d+);', to_utf8):gsub(
+    return str:gsub('&lt;', '<'):gsub('&gt;', '>'):gsub('&quot;', '"'):gsub('&apos;', '\''):gsub('&#(%d+);', plugin.to_utf8):gsub(
         '&#x(%d+);',
         function(n)
             return string.char(tonumber(n, 16)) or n
@@ -53,329 +52,199 @@ function plugin.unescape_html(str)
     ):gsub('&amp;', '&')
 end
 
-function plugin.get_redis_hash(id, option, extra)
-    local ex = ''
-    if option ~= nil then
-        ex = ex .. ':' .. option
-        if extra ~= nil then
-            ex = ex .. ':' .. extra
-        end
-    end
-    return 'rss:' .. id .. ex
+function plugin.get_base_redis(id, option, extra)
+   local ex = ''
+   if option ~= nil then
+      ex = ex .. ':' .. option
+      if extra ~= nil then
+         ex = ex .. ':' .. extra
+      end
+   end
+   return 'rss:' .. id .. ex
 end
 
-function plugin.get_url_protocol(url)
-    local url, is_http = url:gsub('http://', '')
-    local url, is_https = url:gsub('https://', '')
-    local protocol = 'http'
-    if is_https == 1 then
-        protocol = protocol .. 's'
-    end
-    return url, protocol
+function plugin.prot_url(url)
+   local url, h = string.gsub(url, "http://", "")
+   local url, hs = string.gsub(url, "https://", "")
+   local protocol = "http"
+   if hs == 1 then
+      protocol = "https"
+   end
+   return url, protocol
 end
 
-function plugin.get_parsed_feed(url, protocol)
-    local feed, res = nil, 0
-    if protocol == 'http' then
-        feed, res = http.request(url)
-    elseif protocol == 'https' then
-        feed, res = https.request(url)
-    end
-    if res ~= 200 then
-        return nil, 'There was an error whilst connecting to ' .. url
-    end
-    local parse = feedparser.parse(feed)
-    if parse == nil then
-        return nil, 'There was an error retrieving a valid RSS feed from that url. Please, make sure you typed it correctly, and try again.'
-    end
-    return parse, nil
+function plugin.get_rss(url, prot)
+   local res, code = nil, 0
+   if prot == "http" then
+      res, code = http.request(url)
+   elseif prot == "https" then
+      res, code = https.request(url)
+   end
+   if code ~= 200 then
+      return nil, "Error while doing the petition to " .. url
+   end
+   local parsed = feedparser.parse(res)
+   if parsed == nil then
+      return nil, "Error decoding the RSS.\nAre you sure that " .. url .. " it's a RSS?"
+   end
+   return parsed, nil
 end
 
-function plugin.get_new_entries(last_entry, parsed)
-    local entries = {}
-    for k, v in pairs(parsed) do
-        if v.id == last_entry then
-            return entries
-        else
-            table.insert(
-                entries,
-                v
-            )
-        end
-    end
-    return entries
+function plugin.get_new_entries(last, nentries)
+   local entries = {}
+   for k,v in pairs(nentries) do
+      if v.id == last then
+         return entries
+      else
+         table.insert(entries, v)
+      end
+   end
+   return entries
+end
+
+function plugin.print_subs(id)
+   local uhash = plugin.get_base_redis(id)
+   local subs = db:smembers(uhash)
+   local subs2 = ''
+   local text = 'You are subscribed to:\n---------\n'
+   for k,v in pairs(subs) do
+      subs2 = subs2 .. k .. " - " .. v .. '\n'
+   end
+   if not subs2  or subs2 == '' then
+     return "You are not subscribed to any RSS Feed"
+   else
+     return text..subs2
+   end
 end
 
 function plugin.subscribe(id, url)
-    local base_url, protocol = plugin.get_url_protocol(url)
-    local protocol_hash = plugin.get_redis_hash(
-        base_url,
-        'protocol'
-    )
-    local last_entry_hash = plugin.get_redis_hash(
-        base_url,
-        'last_entry'
-    )
-    local subscription_hash = plugin.get_redis_hash(
-        base_url,
-        'subscriptions'
-    )
-    local id_hash = plugin.get_redis_hash(id)
-    if db:sismember(
-        id_hash,
-        base_url
-    ) then
-        return 'You are already subscribed to ' .. url
-    end
-    local parsed, res = plugin.get_parsed_feed(
-        url,
-        protocol
-    )
-    if res ~= nil then
-        return res
-    end
-    local last_entry = ''
-    if #parsed.entries > 0 then
-        last_entry = parsed.entries[1].id
-    end
-    local name = parsed.feed.title
-    db:set(
-        protocol_hash,
-        protocol
-    )
-    db:set(
-        last_entry_hash,
-        last_entry
-    )
-    db:sadd(
-        subscription_hash,
-        id
-    )
-    db:sadd(
-        id_hash,
-        base_url
-    )
-    return 'You are now subscribed to <a href="' .. url .. '">' .. tools.escape_html(name) .. '</a> - you will receive updates for this feed right here in this chat!'
+   local baseurl, protocol = plugin.prot_url(url)
+
+   local prothash = plugin.get_base_redis(baseurl, "protocol")
+   local lasthash = plugin.get_base_redis(baseurl, "last_entry")
+   local lhash = plugin.get_base_redis(baseurl, "subs")
+   local uhash = plugin.get_base_redis(id)
+
+   if db:sismember(uhash, baseurl) then
+      return "You are already subscribed to " .. url
+   end
+
+   local parsed, err = plugin.get_rss(url, protocol)
+   if err ~= nil then
+      return err
+   end
+
+   local last_entry = ""
+   if #parsed.entries > 0 then
+      last_entry = parsed.entries[1].id
+   end
+
+   local name = parsed.feed.title
+
+   db:set(prothash, protocol)
+   db:set(lasthash, last_entry)
+   db:sadd(lhash, id)
+   db:sadd(uhash, baseurl)
+
+   return "You had been subscribed to " .. name
 end
 
 function plugin.unsubscribe(id, n)
-    if #n > 5 then
-        return 'You cannot subscribe to more than 5 RSS feeds!'
-    end
-    n = tonumber(n)
-    local id_hash = plugin.get_redis_hash(id)
-    local subscriptions = db:smembers(id_hash)
-    if n < 1 or n > #subscriptions then
-        return 'Please enter a valid subscription ID.'
-    end
-    local subscription = subscriptions[n]
-    local subscription_hash = plugin.get_redis_hash(
-        subscription,
-        'subscriptions'
-    )
-    db:srem(
-        id_hash,
-        subscription
-    )
-    db:srem(
-        subscription_hash,
-        id
-    )
-    local unsubscribed = db:smembers(subscription_hash)
-    if #unsubscribed < 1 then
-        db:del(
-            plugin.get_redis_hash(
-                subscription,
-                'protocol'
-            )
-        )
-        db:del(
-            plugin.get_redis_hash(
-                subscription,
-                'last_entry'
-            )
-        )
-    end
-    return 'You will no longer receive updates from this feed.'
-end
+   if #n > 5 then
+      return "The maximum number of subscription is 5"
+   end
+   n = tonumber(n)
 
-function plugin.get_subs(id)
-    local subscriptions = db:smembers(plugin.get_redis_hash(id))
-    if not subscriptions[1] then
-        return 'You are not subscribed to any RSS feeds!'
-    end
-    local keyboard = {
-    }
-    local buttons = {}
-    local text = 'This chat is currently receiving updates for the following RSS feeds:'
-    for k, v in pairs(subscriptions) do
-        text = text .. '\n' .. k .. ': ' .. v .. '\n'
-        table.insert(
-            buttons,
-            {
-                ['text'] = '/rss del ' .. k
-            }
-        )
-    end
-    keyboard = {
-        buttons,
-        {
-            {
-                ['text'] = 'Cancel'
-            }
-        }
-    }
-    return text, json.encode(keyboard)
+   local uhash = plugin.get_base_redis(id)
+   local subs = db:smembers(uhash)
+   if n < 1 or n > #subs then
+      return "Subscription id out of range!"
+   end
+   local sub = subs[n]
+   local lhash = plugin.get_base_redis(sub, "subs")
+
+   db:srem(uhash, sub)
+   db:srem(lhash, id)
+
+   local left = db:smembers(lhash)
+   if #left < 1 then -- no one subscribed, remove it
+      local prothash = plugin.get_base_redis(sub, "protocol")
+      local lasthash = plugin.get_base_redis(sub, "last_entry")
+      db:del(prothash)
+      db:del(lasthash)
+   end
+
+   return "You had been unsubscribed from " .. sub
 end
 
 function plugin.min_cron()
-    local keys = db:keys(
-        plugin.get_redis_hash(
-            '*',
-            'subscriptions'
-        )
-    )
-    for k, v in pairs(keys) do
-        local base_url = v:match('rss:(.+):subs')
-        local protocol = db:get(
-            plugin.get_redis_hash(
-                base_url,
-                'protocol'
-            )
-        )
-        local last_entry = db:get(
-            plugin.get_redis_hash(
-                base_url,
-                'last_entry'
-            )
-        )
-        base_url = protocol .. '://' .. base_url
-        local parsed, res = plugin.get_parsed_feed(base_url, protocol)
-        if res ~= nil then
-            return
+   -- sync every 15 mins?
+   local keys = db:keys(plugin.get_base_redis("*", "subs"))
+   for k,v in pairs(keys) do
+      local base = string.match(v, "rss:(.+):subs")  -- Get the URL base
+      local prot = db:get(plugin.get_base_redis(base, "protocol"))
+      local last = db:get(plugin.get_base_redis(base, "last_entry"))
+      local url = prot .. "://" .. base
+      local parsed, err = plugin.get_rss(url, prot)
+      if err ~= nil then
+         return
+      end
+      local newentr = plugin.get_new_entries(last, parsed.entries)
+      local subscribers = {}
+      local text = ''  -- Send only one message with all updates
+      for k2, v2 in pairs(newentr) do
+         local title = v2.title or 'No title'
+         local auhtor = v2.creator or 'Anonymous'
+         local link = v2.link or v2.id or 'No Link'
+         if v2.summary or v2.description or v2.content then
+          summary_text = v2.summary or v2.description or v2.content
+          content = summary_text:gsub('<br>', '\n'):gsub('%b<>', '')
+          if summary_text:len() > 500 then
+            content = plugin.unescape_html(content):sub(1, 500) .. '...'
+          else
+            content = plugin.unescape_html(content)
+          end
+        else
+          content = ''
         end
-        local new = plugin.get_new_entries(
-            last_entry,
-            parsed.entries
-        )
-        local text = ''
-        for n, entry in pairs(new) do
-            local title = entry.title or 'No title'
-            local link = entry.link or entry.id or 'No link'
-            local content = ''
-            if entry.content then
-                content = entry.content:gsub('<br>', '\n'):gsub('%b<>', '')
-                if entry.content:len() > 500 then
-                    content = plugin.unescape_html(content):sub(1, 500) .. '...'
-                else
-                    content = plugin.unescape_html(content)
-                end
-            elseif entry.summary or entry.description then
-              summary_text = entry.summary or entry.description
-              content = summary_text:gsub('<br>', '\n'):gsub('%b<>', '')
-              if summary_text:len() > 500 then
-                  content = rss.unescape_html(content):sub(1, 500) .. '...'
-              else
-                  content = rss.unescape_html(content)
-              end
-            else
-                content = ''
-            end
-            text = text .. '<b>' .. tools.escape_html(title) .. '</b>\n<i>' .. tools.escape_html(tools.trim(content)) .. '</i>\n<a href="' .. link .. '">Read more.</a>'
-            if n > 1 then
-                break
-            end
-        end
-        if text ~= '' then
-            local last_entry = new[1].id or new[1].guid
-            db:set(
-                plugin.get_redis_hash(
-                    base_url,
-                    'last_entry'
-                ),
-                last_entry
-            )
-            for _,recipient in pairs(
-                db:smembers(v)
-            ) do
-                local success = api.sendMessage(
-                    recipient,
-                    text,
-                    'html'
-                )
-                if not success then
-                    db:srem(
-                        v,
-                        recipient
-                    )
-                    db:srem(
-                        'rss:' .. recipient,
-                        base_url
-                    )
-                end
-            end
-        end
-    end
+
+        text = text .. "<b>"..tools.escape_html(title).."</b>\nby <i>"..tools.escape_html(author).."</i>\n\n"..tools.escape_html(content).."\n\n<a href='"..tools.escape_html(link).."'>Read more</a>\n"
+      end
+      if text ~= '' then
+         local newlast = newentr[1].id
+         db:set(plugin.get_base_redis(base, "last_entry"), newlast)
+         for k2, receiver in pairs(db:smembers(v)) do
+            api.sendMessage(receiver, text, "html")
+         end
+      end
+   end
 end
 
 function plugin.onTextMessage(msg, blocks)
-    local input = blocks[2]
-    if not input then
-      api.sendReply(
-        msg,
-        "Avaliable Commands:\n\n- /rss `sub` {_RSS Feed URL_} - Subscribe to that feed\n- /rss `del` {_RSS ID_} - Remove the subscription of that RSS (to get the list of subscriptions: /rss _del_)",
-        true,
-        nil,
-        true
-    )
-    end
-    if input == 'del' and not blocks[3] then
-        local output, keyboard = plugin.get_subs(msg.chat.id)
-        api.sendMessage(
-            msg.chat.id,
-            output
-        )
-    elseif input == 'sub' and not blocks[3] then
-        api.sendReply(
-            msg,
-            'Please specify the RSS feed you would like to subscribe to using /rss sub <url>.'
-        )
-    elseif input == 'sub' and blocks[3] then
-        api.sendReply(
-            msg,
-            plugin.subscribe(
-                msg.chat.id,
-                blocks[3]
-            ),
-            'html'
-        )
-    elseif input == 'del' and blocks[3] then
-        api.sendReply(
-            msg,
-            plugin.unsubscribe(
-                msg.chat.id,
-                blocks[3]
-            )
-        )
-    elseif input == 'reload' then
-      if u.is_superadmin(msg.chat.id) then
-        plugin.min_cron()
-        api.sendReply(
-          msg,
-          'Checking for RSS updates...'
-        )
+   local id = msg.chat.id
+
+   if blocks[1] == "rss" and not blocks[2] and not blocks[3] then
+      api.sendReply(msg, plugin.print_subs(id))
+   elseif blocks[2] == "sync" then
+      if not u.is_superadmin(id) then
+         api.sendReply(msg, "Only superadmins can refresh the RSS", true, nil, true)
       else
-        api.sendReply(
-        msg,
-          "You are not an admin!"
-        )
+        api.sendReply(msg, "Fetching RSS Feeds...", true, nil, true)
+        plugin.min_cron()
       end
-    else
-        api.sendReply(
-            msg,
-            "Unrecognized Request"
-        )
-    end
+   elseif blocks[3] then
+     if blocks[2] == "subscribe" or blocks[2] == "sub" then
+        api.sendReply(msg, plugin.subscribe(id, blocks[3]))
+     elseif blocks[2] == "unsubscribe" or blocks[2] == "uns" or blocks[2] == "del" or blocks[2] == "delete" then
+        if tonumber(blocks[3]) ~= nil then
+          api.sendReply(msg, plugin.unsubscribe(id, blocks[3]))
+        else
+          api.sendReply(msg, "You must input a number (acording to the RSS Feed ID)")
+        end
+     end
+   else
+     api.sendReply(msg, "You should input an URL")
+   end
 end
 
 plugin.triggers = {
