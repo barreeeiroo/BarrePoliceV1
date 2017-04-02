@@ -11,7 +11,7 @@ function plugin.onTextMessage(msg, blocks)
   api.sendChatAction(msg.chat.id, "typing")
   local input = blocks[2]
   if not input then
-      return api.sendReply(
+      api.sendReply(
           msg,
           "Please, specify an Instagram username"
       )
@@ -33,19 +33,19 @@ function plugin.onTextMessage(msg, blocks)
   }
   local str = table.concat(response)
   if res ~= 200 then
-      return api.sendReply(
+      api.sendReply(
           msg,
           "There was a connection problem. Please, try again later"
       )
   elseif not str:match('%<a href%=%"%#%" onclick%=%"window%.open%(%\'(https%:%/%/scontent%.cdninstagram%.com%/.-)%\'%, %\'%_blank%\'%)%;%"%>') then
-      return api.sendReply(
+      api.sendReply(
           msg,
           "I couldn't find that person or he has not profile image. Maybe you wrote wrong the username"
       )
   end
-  
+
   api.sendChatAction(msg.chat.id, "upload_photo")
-  return api.sendMediaId(msg.chat.id, str:match('%<a href%=%"%#%" onclick%=%"window%.open%(%\'(https%:%/%/scontent%.cdninstagram%.com%/.-)%\'%, %\'%_blank%\'%)%;%"%>'), "photo", msg.message_id, "@"..input.." on Instagram")
+  api.sendMediaId(msg.chat.id, str:match('%<a href%=%"%#%" onclick%=%"window%.open%(%\'(https%:%/%/scontent%.cdninstagram%.com%/.-)%\'%, %\'%_blank%\'%)%;%"%>'), "photo", msg.message_id, "@"..input.." on Instagram")
 end
 
 plugin.triggers = {
