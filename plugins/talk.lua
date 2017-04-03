@@ -1,4 +1,4 @@
-local config = require '../config'
+local config = require 'config'
 local u = require 'utilities'
 local api = require 'methods'
 local HTTP = require('socket.http')
@@ -32,12 +32,31 @@ function plugin.onTextMessage(msg, blocks)
         output, res = HTTP.request(url)
     end
 
-    api.sendReply(msg, "`"..output.."`", true, reply_markup)
+    api.sendReply(msg, "`"..output.."`", true, nil, true)
+  else
+    if blocks[1] == "bot" or blocks[1] == "Bot" then
+      api.sendChatAction(msg.chat.id, "typing")
+      local base_url = "http://barreeeiroo.ga/BarrePolice/cleverbot/"
+      local key = config.cleverbot_api_key
+      local input = urlencode(blocks[2]:gsub(",%s+", ""))
+
+      local url = base_url .. "?key=" .. key .. "&input=" .. input
+
+      local output, res = HTTP.request(url)
+
+      if not output or res ~= 200 or output:len() == 0 then
+          url = base_url .. "?input=" .. request_text .. "&key=" .. api_key
+          output, res = HTTP.request(url)
+      end
+
+      api.sendReply(msg, "`"..output.."`", true, nil, true)
+    end
   end
 end
 
 plugin.triggers = {
 	onTextMessage = {
+    '([B/b]ot),? (.*)$',
 		'(.*)$'
 	}
 }
