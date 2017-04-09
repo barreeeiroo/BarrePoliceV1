@@ -194,7 +194,7 @@ function plugin.min_cron()
       local text = ''  -- Send only one message with all updates
       for k2, v2 in pairs(newentr) do
          local title = v2.title or 'No title'
-         local auhtor = v2.creator or 'Anonymous'
+         local author = v2.creator or 'Anonymous'
          local link = v2.link or v2.id or 'No Link'
          if v2.summary or v2.description or v2.content then
           summary_text = v2.summary or v2.description or v2.content
