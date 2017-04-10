@@ -8,7 +8,10 @@ local function get_helped_string(key)
 	if key == 'start' then
 		return _([[
 Hello %s 👋🏼, nice to meet you!
-I'm Group Butler, the first administration bot using the official Bot API.
+I'm BarrePolice, an administrative group bot with extra commands.
+
+ You can talk to me like a human too. I will reply as a human.
+ In groups, call me starting with Bot (eg.: _Bot, How are you?_)
 
 *I can do a lot of cool stuffs*, here's a short list:
 • I can *kick or ban* users
@@ -340,6 +343,22 @@ The avaliable commands right now are:
 
 {`something`} = the `something` is optional]])
 
+	elseif key == 'gihpy' then
+		return _([[*GIFs Plugin*
+
+Do you like GIFs? So, use this command to search in [Gihpy](http://giphy.com) to get any GIF!
+The avaliable commands are:
+- /gif {`query`} - _Sends a trending GIF, or a GIF matching your `query`_
+
+{`something`} = the `something` is optional]])
+
+	elseif key == 'github' then
+		return _([[*GitHub Plugin*
+
+Fetch some info about any public repo of [GitHub](https://github.com/). You can get from the language to the watchers or the stargazers.
+The avaliable commands are:
+- /github `username` `repo` - _Get the info of that repository]])
+
 	elseif key == 'instagram' then
 		return _([[*Instagram Plugin*
 
@@ -351,10 +370,18 @@ The avaliable commands are:
 	elseif key == 'isX' then
 		return _([[*Porn Detector*
 
-Don't you like porn images? Do you want to detect them without seen it? Here's the solution:
+Do you hate like porn images? Do you want to detect them without seen it? Here's the solution:
 This plugin will allow you to detect if an image contains explicit content.
 The avaliable commands are:
 - /isX `Image_URL` - _Detects if it has porn_]])
+
+	elseif key == 'plugin' then
+		return _([[*Plugins Command*
+
+*This plugin is just for superadmins!*
+They can enable or disable any plugin from Telegram. The plugin is still under development.
+The avaliable commands right now are:
+- /plugins `list` - _Get a list of all plugins_]])
 
 	elseif key == 'ping' then
 		return _([[*Ping Plugin*
@@ -363,12 +390,32 @@ This plugins cannot be more simple. It's function is just to know if I'm running
 The avaliable commands are:
 - /ping - _Receive an answer to see if I'm alive_]])
 
+	elseif key == 'pokemon' then
+		return _([[*Pokemon Plugin*
+
+If you are a fan of Pokemon, this plugin is for you!
+It has multiple functions, like a Pokedex, and we are working to add more!
+The avaliable commands right now are:
+- /pokedex `ID`/`Name` - _Sends the Pokedex info about that pokemon_]])
+
 	elseif key == 'porn' then
 		return _([[*Porn Plugin 🔞*
 
 This plugin is not for under 18. It sends a porn image of butts or boobs
 The avaliable commands are:
 - /porn `boobs`/`butts` - _Sends an image of your selection_]])
+
+	elseif key == 'rss' then
+		return _([[*RSS Feed Plugin*
+
+Subscribe to any RSS or Atom Feed with this plugin.
+Feeds are checked every minute to get the latest post on it. The maximum feeds per chat is 5.
+The avaliable commands are:
+- /rss - _Get the list of your RSS subs
+- /rss `sync` - _Re-sync all the feeds_
+- /rss `sub` `_URL_` - _Subscribe to that feed_
+- /rss `del` `_Feed Number ID_` - _Remove that feed_
+]])
 
 	elseif key == 'shout' then
 		return _([[*Shout Plugin*
@@ -377,14 +424,6 @@ Let's shout words! With this plugin, the bot will simulate that you are shouting
 The avaliable commands are:
 - /shout `something` - _Shout the _`something`]])
 
-	elseif key == 'talk' then
-		return _([[*Talk Plugin*
-
-My creator has worked so much in this plugin, and it allows you to talk with me as if I were a human!
-It uses CleverBot API for receiving the answers, but don't abuse, because I can only receive 5000 petitions per month
-The avaliable commands are:
-- /talk `something` - _I will reply to your _`something`_ with a clever (or not) answer_]])
-
 	elseif key == 'yoda' then
 		return _([[*Yoda Plugin*
 
@@ -392,14 +431,6 @@ Do you like Star Wars? So you must know who is Yoda. If you have ever wondered t
 This plugin will transform everything you say into Yoda Words. Test it!
 The avaliable commands are:
 - /yoda `something` - _Transform your _`something`_ into a Yoda's words_]])
-
-	elseif key == 'pokemon' then
-		return _([[*Pokemon Plugin*
-
-If you are a fan of Pokemon, this plugin is for you!
-It has multiple functions, like a Pokedex, and we are working to add more!
-The avaliable commands right now are:
-- /pokedex `ID`/`Name` - _Sends the Pokedex info about that pokemon_]])
 
 	elseif key == 'none' then
 		return _([[`None`]])
@@ -456,10 +487,15 @@ local function dk_others()
 	  },
 		{
 			[_("Clash Royale")] = 'clashroyale',
+			[_("Gif")] = 'giphy'
+	  },
+		{
+			[_("GitHub")] = 'github',
 			[_("Instagram")] = 'instagram'
 	  },
 		{
-			[_("Porn Detector")] = 'isX'
+			[_("Porn Detector")] = 'isX',
+			[_("Plugins")] = 'plugins'
 	  },
 		{
 	    [_("Ping")] = 'ping',
@@ -467,10 +503,10 @@ local function dk_others()
 	  },
 		{
 			[_("Porn 🔞")] = 'porn',
-			[_("Shout")] = 'shout'
+			[_("RSS Feed")] = 'rss'
 	  },
 		{
-			[_("Talk")] = 'talk',
+			[_("Shout")] = 'shout',
 			[_("Yoda")] = 'yoda'
 	  },
 
