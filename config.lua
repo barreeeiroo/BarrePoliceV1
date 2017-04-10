@@ -80,6 +80,7 @@ return {
 		'porn',
 		'rss',
 		'shout',
+		'web-utils',
 		'yoda',
 		-- END
 
