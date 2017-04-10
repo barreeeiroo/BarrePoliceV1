@@ -16,6 +16,10 @@ function urlencode(str)
    return str
 end
 
+function string.starts(String,Start)
+   return string.sub(String,1,string.len(Start))==Start
+end
+
 function plugin.onTextMessage(msg, blocks)
   if msg.chat.type == 'private' then
   	api.sendChatAction(msg.chat.id, "typing")
@@ -34,7 +38,7 @@ function plugin.onTextMessage(msg, blocks)
 
     api.sendReply(msg, "`"..output.."`", true, nil, true)
   else
-    if blocks[1] == "bot" or blocks[1] == "Bot" then
+    if string.starts(blocks[1],"bot") or string.starts(blocks[1],"Bot") then
       api.sendChatAction(msg.chat.id, "typing")
       local base_url = "http://barreeeiroo.ga/BarrePolice/cleverbot/"
       local key = config.cleverbot_api_key
