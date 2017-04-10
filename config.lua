@@ -70,6 +70,7 @@ return {
 		'apod',
 		'cats',
 		'clashroyale',
+		'giphy',
 		'github',
 		'instagram',
 		'isX',
