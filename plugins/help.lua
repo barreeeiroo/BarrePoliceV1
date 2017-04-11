@@ -343,7 +343,7 @@ The avaliable commands right now are:
 
 {`something`} = the `something` is optional]])
 
-	elseif key == 'gihpy' then
+	elseif key == 'giphy' then
 		return _([[*GIFs Plugin*
 
 Do you like GIFs? So, use this command to search in [Gihpy](http://giphy.com) to get any GIF!
@@ -357,7 +357,7 @@ The avaliable commands are:
 
 Fetch some info about any public repo of [GitHub](https://github.com/). You can get from the language to the watchers or the stargazers.
 The avaliable commands are:
-- /github `username` `repo` - _Get the info of that repository]])
+- /github `username` `repo` - _Get the info of that repository_]])
 
 	elseif key == 'instagram' then
 		return _([[*Instagram Plugin*
@@ -376,7 +376,7 @@ The avaliable commands are:
 - /isX `Image_URL` - _Detects if it has porn_]])
 
 	elseif key == 'plugin' then
-		return _([[*Plugins Command*
+		return _([[*Plugins' Command*
 
 *This plugin is just for superadmins!*
 They can enable or disable any plugin from Telegram. The plugin is still under development.
