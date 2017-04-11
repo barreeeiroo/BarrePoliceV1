@@ -375,7 +375,7 @@ This plugin will allow you to detect if an image contains explicit content.
 The avaliable commands are:
 - /isX `Image_URL` - _Detects if it has porn_]])
 
-	elseif key == 'plugin' then
+	elseif key == 'plugins' then
 		return _([[*Plugins' Command*
 
 *This plugin is just for superadmins!*
