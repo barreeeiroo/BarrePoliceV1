@@ -346,7 +346,7 @@ The avaliable commands right now are:
 	elseif key == 'giphy' then
 		return _([[*GIFs Plugin*
 
-Do you like GIFs? So, use this command to search in [Gihpy](http://giphy.com) to get any GIF!
+Do you like GIFs? So, use this command to search in [Giphy](http://giphy.com) to get any GIF!
 The avaliable commands are:
 - /gif {`query`} - _Sends a trending GIF, or a GIF matching your `query`_
 
