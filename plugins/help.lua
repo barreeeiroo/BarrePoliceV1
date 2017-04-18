@@ -411,7 +411,7 @@ The avaliable commands are:
 Subscribe to any RSS or Atom Feed with this plugin.
 Feeds are checked every minute to get the latest post on it. The maximum feeds per chat is 5.
 The avaliable commands are:
-- /rss - _Get the list of your RSS subs
+- /rss - _Get the list of your RSS subs_
 - /rss `sync` - _Re-sync all the feeds_
 - /rss `sub` `_URL_` - _Subscribe to that feed_
 - /rss `del` `_Feed Number ID_` - _Remove that feed_
